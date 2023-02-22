@@ -19,7 +19,10 @@ class CreateCompaniesTable extends Migration
             $table->string('email')->nullable()->unique();
             $table->string('logo')->nullable();
             $table->string('website')->nullable();
+            $table->unsignedBigInteger('created_by');
             $table->timestamps();
+            
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -29,7 +32,7 @@ class CreateCompaniesTable extends Migration
      * @return void
      */
     public function down()
-    {
+    {   
         Schema::dropIfExists('companies');
     }
 }
