@@ -21,7 +21,7 @@ class CompanyTest extends TestCase
             ->assertSee($company->name)
             ->assertSee($company->email)
             ->assertSee($company->logo)
-            ->assertSee($company->website)
+            ->assertSee($company->website);
     }
 
     /** @test */
