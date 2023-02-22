@@ -10,6 +10,8 @@
                 <div class="card-body">
                     @foreach ($companies as $company)
                         {{ $company->name }}
+                        {{ $company->path() }}
+
                     @endforeach
                 </div>
             </div>
