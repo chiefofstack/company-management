@@ -75,11 +75,12 @@ class CompanyTest extends TestCase
         $this->post('/companies',[])->assertSessionHasErrors('website');
     }
 
-    /** @test */  
-    public function a_company_must_have_a_creator()
-    {           
-        $attributes = factory('App\Company')->raw(['created_by'=>null]);     
-        $this->post('/companies',[])->assertSessionHasErrors('created_by');
+    /** @test */
+    // middleware approach
+    public function only_authenticated_user_can_create_company()
+    {
+        // $this->withoutExceptionHandling(); //for debugging, on this case see if authenticated error is shown
+        $attributes = factory('App\Company')->raw();     
+        $this->post('/companies',[])->assertRedirect('login');
     }
-
 }
