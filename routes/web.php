@@ -23,7 +23,7 @@ Auth::routes([
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/companies', 'CompanyController@index');
+Route::get('/companies', 'CompanyController@index')->middleware('auth');
 Route::get('/companies/{company}', 'CompanyController@show');
 Route::post('/companies', 'CompanyController@store')->middleware('auth');
 
