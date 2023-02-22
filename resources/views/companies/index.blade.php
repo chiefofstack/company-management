@@ -8,11 +8,13 @@
                 <div class="card-header">{{ __('Dashboard') }}</div>
 
                 <div class="card-body">
-                    @foreach ($companies as $company)
-                        {{ $company->name }}
-                        {{ $company->path() }}
-
-                    @endforeach
+                    @forelse ($companies as $company)
+                    <a href="{{ $company->path() }}">{{ $company->name }}</a>
+                        
+                        
+                    @empty
+                        <p>No companies yet</p>
+                    @endforelse
                 </div>
             </div>
         </div>
