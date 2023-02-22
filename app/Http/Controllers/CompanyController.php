@@ -34,10 +34,7 @@ class CompanyController extends Controller
             // 'created_by' => ['required']
         ]);
 
-        // $attributes['created_by'] = auth()->id(); //instead of requiring the field, require to be logged in
-
         //persist
-        //Company::create($attributes);
         auth()->user()->companies()->create($attributes); //switch to this
 
 
