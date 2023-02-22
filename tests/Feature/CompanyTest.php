@@ -17,7 +17,7 @@ class CompanyTest extends TestCase
 
         $company = factory('App\Company')->create();
 
-        $this->get('/companies/'.$company->id)
+        $this->get($company->path()) // '/companies/'.$company->id
             ->assertSee($company->name)
             ->assertSee($company->email)
             ->assertSee($company->logo)
