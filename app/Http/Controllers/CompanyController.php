@@ -26,15 +26,20 @@ class CompanyController extends Controller
             'name' => ['required','max:255'],
             'email' => ['required','max:255'],
             'logo' => ['required','max:255'],
-            'website' => ['required','max:255']
+            'website' => ['required','max:255'],
             // 'name' => ['required','max:255'],
             // 'email' => ['nullable','email:rfc,dns','max:255'],
             // 'logo' => ['nullable','image','dimensions:min_width=100,min_height=100','max:1024'],
-            // 'website' => ['nullable','url','max:255']
+            // 'website' => ['nullable','url','max:255'],
+            // 'created_by' => ['required']
         ]);
 
+        // $attributes['created_by'] = auth()->id(); //instead of requiring the field, require to be logged in
+
         //persist
-        Company::create($attributes);
+        //Company::create($attributes);
+        auth()->user()->companies()->create($attributes); //switch to this
+
 
         //redirect
         return redirect('/companies');
