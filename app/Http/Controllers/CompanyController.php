@@ -35,7 +35,7 @@ class CompanyController extends Controller
         ]);
 
         //persist
-        auth()->user()->companies()->create($attributes); //switch to this
+        auth()->user()->companies()->create($attributes); //switch to middleware approach
 
 
         //redirect
