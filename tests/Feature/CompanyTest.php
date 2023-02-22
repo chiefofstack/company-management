@@ -10,6 +10,15 @@ class CompanyTest extends TestCase
 {
     use WithFaker, RefreshDatabase;
 
+
+    /** @test */    
+    public function only_authenticated_user_can_create_company() // middleware approach
+    {
+        //$this->withoutExceptionHandling(); // for debugging, on this case see if authenticated error is shown
+        $attributes = factory('App\Company')->raw();     
+        $this->post('/companies',[])->assertRedirect('login');
+    }
+
     /** @test */
     public function a_user_can_view_a_company(){
         
@@ -27,7 +36,8 @@ class CompanyTest extends TestCase
     /** @test */
     public function a_user_can_create_a_company(){
         
-        $this->withoutExceptionHandling();
+        $this->withoutExceptionHandling(); //for debugging
+        $this->actingAs(factory('App\User')->create()); // pseudo user login
 
         // set attributes
         $filepath = storage_path('app/public/uploaded/logos');
@@ -49,38 +59,31 @@ class CompanyTest extends TestCase
 
     /** @test */
     public function a_company_name_must_be_valid()
-    {   
+    {   $this->actingAs(factory('App\User')->create()); // pseudo user login
         $attributes = factory('App\Company')->raw(['name'=>'']); //return an array
         $this->post('/companies',[$attributes])->assertSessionHasErrors('name');
     }
 
     /** @test */
     public function a_company_email_must_be_valid()
-    {   
+    {   $this->actingAs(factory('App\User')->create()); // pseudo user login
         $attributes = factory('App\Company')->raw(['email'=>'']); 
         $this->post('/companies',[])->assertSessionHasErrors('email');
     }
 
     /** @test */
     public function a_company_logo_must_be_valid()
-    {   
+    {   $this->actingAs(factory('App\User')->create()); // pseudo user login
         $attributes = factory('App\Company')->raw(['logo'=>'']); 
         $this->post('/companies',[])->assertSessionHasErrors('logo');
     }
 
     /** @test */
     public function a_company_website_must_be_valid()
-    {   
+    {   $this->actingAs(factory('App\User')->create()); // pseudo user login
         $attributes = factory('App\Company')->raw(['website'=>'']); 
         $this->post('/companies',[])->assertSessionHasErrors('website');
     }
 
-    /** @test */
-    // middleware approach
-    public function only_authenticated_user_can_create_company()
-    {
-        // $this->withoutExceptionHandling(); //for debugging, on this case see if authenticated error is shown
-        $attributes = factory('App\Company')->raw();     
-        $this->post('/companies',[])->assertRedirect('login');
-    }
+
 }
