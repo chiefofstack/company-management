@@ -19,5 +19,8 @@ $factory->define(Company::class, function (Faker $faker) {
         'email' => $faker->unique()->companyEmail(),
         'logo' => $faker->image(storage_path('app/public/uploaded/logos'), 100, 100, null, false, true, $companyName),
         'website' => 'http://'.$faker->domainName(),
+        'created_by' => function() {
+            return factory(App\User::class)->create()->id;
+        }
     ];
 });
