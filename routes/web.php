@@ -21,11 +21,10 @@ Auth::routes([
         'register' => false
     ]);
 
-Route::get('/home', 'HomeController@index')->name('home');
-
-Route::get('/companies', 'CompanyController@index')->middleware('auth');
-Route::get('/companies/{company}', 'CompanyController@show');
-Route::post('/companies', 'CompanyController@store')->middleware('auth');
-
+Route::group(['middleware' => 'auth'], function () {
+    Route::resource('companies', 'CompanyController');
+    Route::get('/home', 'HomeController@index')->name('home');
+});
+    
 
 
