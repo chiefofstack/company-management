@@ -7,23 +7,94 @@ use App\Company;
 
 class CompanyController extends Controller
 {
-    public function index(){
-    
+    /**
+     * View all companies.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {    
         // $companies = Company::all();
         $companies = auth()->user()->companies;
     
         return view('companies.index', compact('companies'));
     }
-    public function show(Company $company){
-    
+
+    /**
+     * Show a single company.
+     *
+     * @param Company $company
+     *
+     * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function show(Company $company)
+    {
         //$company = Company::findOrFail(request('company'));
     
         return view('companies.show', compact('company'));
     }
 
-    public function store(){
+    /**
+     * Create a new company.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('companies.create');
+    }
+
+    
+    /**
+     * Persist a new company.
+     *
+     * @return mixed
+     */
+    public function store()
+    {
+
+        //persist
+        $company = auth()->user()->companies()->create($this->validateRequest()); //switch to middleware approach
+
+
+        //redirect
+        return redirect($company->path());
+    }
+
+    /**
+     * Edit the company.
+     *
+     * @param  Company $company
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Company $company)
+    {
+        return view('companies.edit', compact('company'));
+    }
+
+
+    /**
+     * Update the company.
+     *
+     * @param  Company $company
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function update(Company $company)
+    {   // if logged in user not the owner of the company, show error
+        if(auth()->user()->id != $company->created_by){
+            abort(403);
+        }    
+
+        $company->update($this->validateRequest());
+
+        return redirect($company->path());
+    }
+
+    public function validateRequest(){
         //validate
-        $attributes = request()->validate([
+        return request()->validate([
             'name' => ['required','max:255'],
             'email' => ['required','max:255'],
             'logo' => ['required','max:255'],
@@ -34,12 +105,6 @@ class CompanyController extends Controller
             // 'website' => ['nullable','url','max:255'],
             // 'created_by' => ['required']
         ]);
-
-        //persist
-        auth()->user()->companies()->create($attributes); //switch to middleware approach
-
-
-        //redirect
-        return redirect('/companies');
     }
 }
+
