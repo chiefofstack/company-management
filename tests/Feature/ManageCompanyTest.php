@@ -28,6 +28,7 @@ class CompanyTest extends TestCase
         $this->get('/companies/create')->assertRedirect('login');
         $this->get($company->path().'/edit')->assertRedirect('login');
         $this->get($company->path())->assertRedirect('login');
+        $this->delete($company->path())->assertRedirect('login');
         $this->post('/companies', $company->toArray())->assertRedirect('login');
     }
 
@@ -161,6 +162,21 @@ class CompanyTest extends TestCase
         $this->patch($company->path())->assertStatus(403);
     }
 
+    /** @test */
+    public function a_user_cannot_delete_others_company()
+    {
+        //$this->withoutExceptionHandling(); 
+
+        // pseudo login
+        $user = $this->signIn();
+
+        // create a new company 
+        $company = factory('App\Company')->create();
+
+          // on delete, test that the status is 403 unauthorized 
+        $this->delete($company->path())->assertStatus(403);
+    }
+
 
     /**
      * Input fields tests
@@ -198,9 +214,5 @@ class CompanyTest extends TestCase
         $attributes = factory('App\Company')->raw(['website'=>'']); 
         $this->post('/companies',[$attributes])->assertSessionHasErrors('website');
     }
-
-
-
-
 
 }
