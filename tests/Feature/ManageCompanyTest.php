@@ -12,9 +12,9 @@ class CompanyTest extends TestCase
 {
     use WithFaker, RefreshDatabase;
 
-    // COMPANY RESOURCE 
-
-    // Un-authenticated user cannot dos:
+    /**
+     * Guest (Un-authenticated) user cannot dos:
+     */
 
     /** @test */
     public function guests_cannot_manage_companies()
@@ -31,7 +31,9 @@ class CompanyTest extends TestCase
         $this->post('/companies', $company->toArray())->assertRedirect('login');
     }
 
-    // Authenticated user can dos:
+    /**
+     * Authenticated user can dos:
+     */
 
     /** @test */
     public function a_user_can_create_a_company()
@@ -101,8 +103,33 @@ class CompanyTest extends TestCase
 
         // dd(Company::all()); // for debugging
     }
+
+    /** @test */
+    public function a_user_can_delete_their_company()
+    {   
+        // $this->withoutExceptionHandling(); 
+        
+        // pseudo login
+        $user = $this->signIn();
+
+        // create a new company for the user
+        $company = factory('App\Company')->create(['created_by' => $user->id]);    
+
+
+        // test if redirected to the index page after deleting the object
+        $this->delete($company->path())
+                ->assertRedirect('/companies');        
+
+        // test object is removed from the db
+        $this->assertDatabaseMissing('companies', $company->only('id'));
+
+        // dd(Company::all()); // for debugging
+    }
     
-    // Authenticated user - cannot dos:
+
+    /**
+     * Authenticated user - cannot dos:
+     */
 
     /** @test */
     public function a_user_cannot_view_others_company()
@@ -135,7 +162,9 @@ class CompanyTest extends TestCase
     }
 
 
-    // COMPANY FIELDS
+    /**
+     * Input fields tests
+     */
 
     /** @test */
     public function a_company_name_must_be_valid()
