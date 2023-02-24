@@ -6,15 +6,18 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
+use App\Company;
+
 class CompanyTest extends TestCase
 {
     use WithFaker, RefreshDatabase;
 
-
+    // COMPANY RESOURCE 
     /** @test */
     public function guests_cannot_manage_companies()
     {   
-        //$this->withoutExceptionHandling(); // for debugging, when creating the test.
+        // for debugging, when working on the test.
+        //$this->withoutExceptionHandling(); 
 
         $company = factory('App\Company')->create();        
 
@@ -25,114 +28,114 @@ class CompanyTest extends TestCase
         $this->post('/companies', $company->toArray())->assertRedirect('login');
     }
 
-
-
     /** @test */
     public function a_user_can_create_a_company()
     {   
-        //$this->withoutExceptionHandling(); // for debugging, when creating the test.
+        // for debugging, when working on the test.
+        //$this->withoutExceptionHandling(); 
+
+        // pseudo login
+        $user = $this->signIn(); 
         
-        $this->signIn();
-
-        $this->get('/companies/create')->assertStatus(200);
-
-        $this->followingRedirects()
-            ->post('/companies', $attributes = factory(Company::class)->raw())
-            ->assertSee($attributes['title'])
-            ->assertSee($attributes['description'])
-            ->assertSee($attributes['notes']);
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /** @test */
-    public function a_user_can_view_a_company(){
+        // test create page exist
+        $this->get('/companies/create')->assertStatus(200); 
         
-        $this->withoutExceptionHandling();
-
-        $company = factory('App\Company')->create();
-
-        $this->get($company->path()) // '/companies/'.$company->id
-            ->assertSee($company->name)
-            ->assertSee($company->email)
-            ->assertSee($company->logo)
-            ->assertSee($company->website);
-    }
-
-    /** @test */
-    public function a_user_can_create_a_company(){
+        // create a new company object for the user
+        $attributes = factory('App\Company')->raw(['created_by' => $user->id]); 
         
-        $this->withoutExceptionHandling(); //for debugging
-        $this->actingAs(factory('App\User')->create()); // pseudo user login
-
-        // set attributes
-        $filepath = storage_path('app/public/uploaded/logos');
-        $attributes = [
-            'name' => $this->faker->name,
-            'email' => $this->faker->safeEmail,
-            'logo' => $this->faker->image($filepath, 400, 300), 
-            'website' => $this->faker->url
-        ];
-        // make a post request to the url with the attributes
-        $this->post('/companies', $attributes)->assertRedirect('/companies');
-
-        // expect to be inserted to the companies table
+        // post the new company object
+        $this->post('/companies', $attributes);
+        
+        // test if object was persisted to the db
         $this->assertDatabaseHas('companies', $attributes);
 
-        // expect to see inserted attributes
+        // test to see if the inserted object show up in the company index 
         $this->get('/companies')->assertSee($attributes['name']);
     }
 
     /** @test */
+    public function a_user_can_view_their_company()
+    {   
+        //$this->withoutExceptionHandling(); 
+        
+        // pseudo login
+        $user = $this->signIn();
+
+        // create a new company object for the user
+        $company = factory('App\Company')->create(['created_by' => $user->id]);              
+
+        // test to see if the object attributes can be seen on the show page
+        $this->get($company->path()) 
+            ->assertSee($company->name)
+            ->assertSee($company->email)
+            ->assertSee($company->logo)
+            ->assertSee($company->website)
+            ->assertSee($company->created_by);
+    }
+
+    /** @test */
+    public function a_user_can_update_their_company()
+    {   
+        $this->withoutExceptionHandling(); 
+        
+        // pseudo login
+        $user = $this->signIn();
+
+        // create a new company for the user
+        $company = factory('App\Company')->create(['created_by' => $user->id]);    
+
+        // test that the edit page exist
+        $this->get($company->path().'/edit')->assertOk();
+
+        // test if redirected to the show page after patching the object with the new attributes
+        $this->patch($company->path(),  $attributes = ['name' => 'Changed Company Name', 'email' => 'changed@email.com', 'logo' => '14344logo.jpg', 'website' => 'www.changedwebsite.com'])
+                ->assertRedirect($company->path());        
+
+        // test if new attributes was persisted to the db
+        $this->assertDatabaseHas('companies', $attributes);
+
+        // dd(Company::all()); // for debugging
+    }
+    
+
+
+    // COMPANY FIELDS
+
+    /** @test */
     public function a_company_name_must_be_valid()
-    {   $this->actingAs(factory('App\User')->create()); // pseudo user login
-        $attributes = factory('App\Company')->raw(['name'=>'']); //return an array
+    {   // pseudo login
+        $this->signIn(); 
+
+        // create a new company with empty name
+        $attributes = factory('App\Company')->raw(['name'=>'']); 
+  
+        // post the company object and expect errors on the form
         $this->post('/companies',[$attributes])->assertSessionHasErrors('name');
     }
 
     /** @test */
     public function a_company_email_must_be_valid()
-    {   $this->actingAs(factory('App\User')->create()); // pseudo user login
+    {   $this->signIn(); 
         $attributes = factory('App\Company')->raw(['email'=>'']); 
-        $this->post('/companies',[])->assertSessionHasErrors('email');
+        $this->post('/companies',[$attributes])->assertSessionHasErrors('email');
     }
 
     /** @test */
     public function a_company_logo_must_be_valid()
-    {   $this->actingAs(factory('App\User')->create()); // pseudo user login
+    {   $this->signIn(); 
         $attributes = factory('App\Company')->raw(['logo'=>'']); 
-        $this->post('/companies',[])->assertSessionHasErrors('logo');
+        $this->post('/companies',[$attributes])->assertSessionHasErrors('logo');
     }
 
     /** @test */
     public function a_company_website_must_be_valid()
     {   $this->signIn();
         $attributes = factory('App\Company')->raw(['website'=>'']); 
-        $this->post('/companies',[])->assertSessionHasErrors('website');
+        $this->post('/companies',[$attributes])->assertSessionHasErrors('website');
     }
+
+
+
 
 
 }
