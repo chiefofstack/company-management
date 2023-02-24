@@ -14,7 +14,7 @@ class CompanyTest extends TestCase
 
     // COMPANY RESOURCE 
 
-    // Un-authenticated users cannot dos
+    // Un-authenticated user cannot dos:
 
     /** @test */
     public function guests_cannot_manage_companies()
@@ -31,7 +31,7 @@ class CompanyTest extends TestCase
         $this->post('/companies', $company->toArray())->assertRedirect('login');
     }
 
-    // Authenticated can dos
+    // Authenticated user can dos:
 
     /** @test */
     public function a_user_can_create_a_company()
@@ -81,7 +81,7 @@ class CompanyTest extends TestCase
     /** @test */
     public function a_user_can_update_their_company()
     {   
-        $this->withoutExceptionHandling(); 
+        //$this->withoutExceptionHandling(); 
         
         // pseudo login
         $user = $this->signIn();
@@ -102,19 +102,36 @@ class CompanyTest extends TestCase
         // dd(Company::all()); // for debugging
     }
     
-    // Authenticated cannot dos
+    // Authenticated user - cannot dos:
 
     /** @test */
     public function a_user_cannot_view_others_company()
     {
+        //$this->withoutExceptionHandling(); 
+
         // pseudo login
         $user = $this->signIn();
 
         // create a new company 
         $company = factory('App\Company')->create();    
 
-        // test status is 403 unaunthorized error 
+        // on get, test that the status is 403 unaunthorized 
         $this->get($company->path())->assertStatus(403);
+    }
+
+    /** @test */
+    public function a_user_cannot_update_others_company()
+    {
+        //$this->withoutExceptionHandling(); 
+
+        // pseudo login
+        $user = $this->signIn();
+
+        // create a new company 
+        $company = factory('App\Company')->create();    
+
+        // on patch, test that the status is 403 unauthorized 
+        $this->patch($company->path())->assertStatus(403);
     }
 
 
