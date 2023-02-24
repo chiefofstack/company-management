@@ -13,6 +13,9 @@ class CompanyTest extends TestCase
     use WithFaker, RefreshDatabase;
 
     // COMPANY RESOURCE 
+
+    // Un-authenticated users cannot dos
+
     /** @test */
     public function guests_cannot_manage_companies()
     {   
@@ -27,6 +30,8 @@ class CompanyTest extends TestCase
         $this->get($company->path())->assertRedirect('login');
         $this->post('/companies', $company->toArray())->assertRedirect('login');
     }
+
+    // Authenticated can dos
 
     /** @test */
     public function a_user_can_create_a_company()
@@ -97,6 +102,20 @@ class CompanyTest extends TestCase
         // dd(Company::all()); // for debugging
     }
     
+    // Authenticated cannot dos
+
+    /** @test */
+    public function a_user_cannot_view_others_company()
+    {
+        // pseudo login
+        $user = $this->signIn();
+
+        // create a new company 
+        $company = factory('App\Company')->create();    
+
+        // test status is 403 unaunthorized error 
+        $this->get($company->path())->assertStatus(403);
+    }
 
 
     // COMPANY FIELDS
