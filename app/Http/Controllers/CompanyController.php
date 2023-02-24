@@ -29,7 +29,11 @@ class CompanyController extends Controller
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function show(Company $company)
-    {
+    {   // if logged in user not the owner of the company, show error
+        if(auth()->user()->id != $company->created_by){
+            abort(403);
+        }    
+
         //$company = Company::findOrFail(request('company'));
     
         return view('companies.show', compact('company'));
@@ -73,7 +77,6 @@ class CompanyController extends Controller
         return view('companies.edit', compact('company'));
     }
 
-
     /**
      * Update the company.
      *
@@ -92,6 +95,29 @@ class CompanyController extends Controller
         return redirect($company->path());
     }
 
+    /**
+     * Destroy the company.
+     *
+     * @param  Company $company
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function destroy(Company $company)
+    {
+        // if logged in user not the owner of the company, show error
+        if(auth()->user()->id != $company->created_by){
+            abort(403);
+        }
+
+        $company->delete();
+
+        return redirect('/companies');
+    }
+
+
+    /**
+     * Validate Requests
+     */
     public function validateRequest(){
         //validate
         return request()->validate([
