@@ -11,7 +11,7 @@ class CompaniesSeeder extends Seeder
      */
     public function run()
     {
-        factory('App\Company', 70)->create(['created_by' => 1]); //assign 70 companies to admin@admin.com
-        factory('App\Company', 370)->create();
+        factory('App\Company', 80)->create(['created_by' => 1]); //assign 80 companies to admin@admin.com
+        factory('App\Company', 80)->create(['created_by' => 2]); //assign 80 companies to admin2@admin2.com
     }
 }
