@@ -3,14 +3,15 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-use App\Company;
+use App\Models\Company;
 
-class CompanyTest extends TestCase
+class ManageCompanyTest extends TestCase
 {
-    use WithFaker, RefreshDatabase;
+    use WithFaker, RefreshDatabase, HasFactory;
 
     /**
      * Guest (Un-authenticated) user cannot dos:
@@ -22,7 +23,7 @@ class CompanyTest extends TestCase
         // for debugging, when working on the test.
         //$this->withoutExceptionHandling(); 
 
-        $company = factory('App\Company')->create();        
+        $company = Company::factory()->create();        
 
         $this->get('/companies')->assertRedirect('login');
         $this->get('/companies/create')->assertRedirect('login');
@@ -49,7 +50,7 @@ class CompanyTest extends TestCase
         $this->get('/companies/create')->assertStatus(200); 
         
         // create a new company object for the user
-        $attributes = factory('App\Company')->raw(['created_by' => $user->id]); 
+        $attributes = Company::factory()->raw(['created_by' => $user->id]); 
         
         // post the new company object
         $this->post('/companies', $attributes);
@@ -70,10 +71,10 @@ class CompanyTest extends TestCase
         $user = $this->signIn();
 
         // create a new company object for the user
-        $company = factory('App\Company')->create(['created_by' => $user->id]);              
-
+        $company = Company::factory()->create(['created_by' => $user->id]);              
+        
         // test to see if the object attributes can be seen on the show page
-        $this->get($company->path()) 
+        $this->get($company->path())
             ->assertSee($company->name)
             ->assertSee($company->email)
             ->assertSee($company->logo)
@@ -90,7 +91,7 @@ class CompanyTest extends TestCase
         $user = $this->signIn();
 
         // create a new company for the user
-        $company = factory('App\Company')->create(['created_by' => $user->id]);    
+        $company = Company::factory()->create(['created_by' => $user->id]);    
 
         // test that the edit page exist
         $this->get($company->path().'/edit')->assertOk();
@@ -114,7 +115,7 @@ class CompanyTest extends TestCase
         $user = $this->signIn();
 
         // create a new company for the user
-        $company = factory('App\Company')->create(['created_by' => $user->id]);    
+        $company = Company::factory()->create(['created_by' => $user->id]);    
 
 
         // test if redirected to the index page after deleting the object
@@ -127,7 +128,6 @@ class CompanyTest extends TestCase
         // dd(Company::all()); // for debugging
     }
     
-
     /**
      * Authenticated user - cannot dos:
      */
@@ -141,7 +141,7 @@ class CompanyTest extends TestCase
         $user = $this->signIn();
 
         // create a new company 
-        $company = factory('App\Company')->create();    
+        $company = Company::factory()->create();    
 
         // on get, test that the status is 403 unaunthorized 
         $this->get($company->path())->assertStatus(403);
@@ -156,7 +156,7 @@ class CompanyTest extends TestCase
         $user = $this->signIn();
 
         // create a new company 
-        $company = factory('App\Company')->create();    
+        $company = Company::factory()->create();    
 
         // on patch, test that the status is 403 unauthorized 
         $this->patch($company->path())->assertStatus(403);
@@ -171,7 +171,7 @@ class CompanyTest extends TestCase
         $user = $this->signIn();
 
         // create a new company 
-        $company = factory('App\Company')->create();
+        $company = Company::factory()->create();
 
           // on delete, test that the status is 403 unauthorized 
         $this->delete($company->path())->assertStatus(403);
@@ -188,7 +188,7 @@ class CompanyTest extends TestCase
         $this->signIn(); 
 
         // create a new company with empty name
-        $attributes = factory('App\Company')->raw(['name'=>'']); 
+        $attributes = Company::factory()->raw(['name'=>'']); 
   
         // post the company object and expect errors on the form
         $this->post('/companies',[$attributes])->assertSessionHasErrors('name');
@@ -197,21 +197,21 @@ class CompanyTest extends TestCase
     /** @test */
     public function a_company_email_must_be_valid()
     {   $this->signIn(); 
-        $attributes = factory('App\Company')->raw(['email'=>'']); 
+        $attributes = Company::factory()->raw(['email'=>'']); 
         $this->post('/companies',[$attributes])->assertSessionHasErrors('email');
     }
 
     /** @test */
     public function a_company_logo_must_be_valid()
     {   $this->signIn(); 
-        $attributes = factory('App\Company')->raw(['logo'=>'']); 
+        $attributes = Company::factory()->raw(['logo'=>'']); 
         $this->post('/companies',[$attributes])->assertSessionHasErrors('logo');
     }
 
     /** @test */
     public function a_company_website_must_be_valid()
     {   $this->signIn();
-        $attributes = factory('App\Company')->raw(['website'=>'']); 
+        $attributes = Company::factory()->raw(['website'=>'']); 
         $this->post('/companies',[$attributes])->assertSessionHasErrors('website');
     }
 
