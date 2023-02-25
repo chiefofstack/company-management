@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between">
                     <h4 class="mb-0">Companies</h4>
-                    <a href="companies/create" class="btn btn-primary">Add New Company</a>
+                    <a href="{{URL::route('companies.create')}}" class="btn btn-primary">Add New Company</a>
                 </div>
 
                 <div class="card-body">
