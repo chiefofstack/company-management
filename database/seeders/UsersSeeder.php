@@ -1,7 +1,9 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
-use App\User;
+use App\Models\User;
 
 class UsersSeeder extends Seeder
 {
@@ -13,13 +15,13 @@ class UsersSeeder extends Seeder
     public function run()
     {
         if (User::count() == 0) {
-            factory('App\User')->create([
+            User::factory()->create([
                 'name' => 'Admin',
                 'email' => 'admin@admin.com',
                 'password' => bcrypt('password')
             ]);
 
-            factory('App\User')->create([
+            User::factory()->create([
                 'name' => 'Admin2',
                 'email' => 'admin2@admin2.com',
                 'password' => bcrypt('password')
