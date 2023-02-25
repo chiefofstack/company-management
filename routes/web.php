@@ -25,6 +25,3 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('companies', 'CompanyController');
     Route::get('/home', 'HomeController@index')->name('home');
 });
-    
-
-
