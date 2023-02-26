@@ -15,9 +15,11 @@ class Company extends Model
         $companies = Company::with('creator')->where('created_by', '=', auth()->user()->id);
 
         if (request('search') !== null)
-        {   $companies->where('name','like','%'.request('search').'%');
-            $companies->orWhere('email','like','%'.request('search').'%');
-            $companies->orWhere('website','like','%'.request('search').'%');
+        {   $companies->where(function($query) {
+                $query->where('name','like','%'.request('search').'%')
+                    ->orWhere('email','like','%'.request('search').'%')
+                    ->orWhere('website','like','%'.request('search').'%');
+            });
         }
         
         $companies = $companies->latest('updated_at')->paginate(10);    
