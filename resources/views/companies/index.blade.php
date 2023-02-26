@@ -4,6 +4,18 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
+            @if (session('added'))
+                <div class="alert alert-success alert-dismissible" >
+                    {{ session('added') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif 
+            @if (session('deleted'))
+                <div class="alert alert-success alert-dismissible" >
+                    {{ session('deleted') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif 
             <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between">
                     <h4 class="mb-0">Companies</h4>
@@ -14,7 +26,7 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-12">
-                                <form action="#" method="get">                                    
+                                <form action="{{ route('companies.index') }}" method="get">                                    
                                     <div class="search-form">
                                         <div class="form-group">
                                             <input 
@@ -25,7 +37,7 @@
                                                 value="{{ request('search') }}" 
                                                 placeholder="Enter name, email or website"
                                             >
-                                            <span class="form-message">{{ $companies->total() > 1 ? "There are" : "There is" }} {{ $companies->total() }} {{ $companies->total() > 1 ? "companies" : "company" }} {{ request('search') !== NULL ? "matching" : "" }} '{{ request('search') }}'  </span>
+                                            <span class="form-message">{{ $companies->total() > 1 ? "There are" : "There is" }} {{ $companies->total() }} {{ $companies->total() > 1 ? "companies" : "company" }} {{ request('search') !== NULL ? "matching '".request('search')."' " : "" }}  </span>
                                         </div>
                                         <button type="submit" class="btn btn-primary">
                                             Search
@@ -34,6 +46,7 @@
                                 </form>    
                             </div>
                         </div>
+                        
                         <div class="row">
                             <div class="col-12">
                                 <table class="table table-bordered table-responsive">
