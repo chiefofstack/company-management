@@ -35,7 +35,7 @@ class CompanyController extends Controller
 
         //$company = Company::findOrFail(request('company'));
     
-        return view('companies.show', compact('company'));
+        return view('companies.show', compact('company'))->with('employees', $company->employees);
     }
 
     /**
@@ -56,13 +56,11 @@ class CompanyController extends Controller
      */
     public function store()
     {
-
         //persist
         $company = auth()->user()->companies()->create($this->validateRequest()); //switch to middleware approach
 
-
         //redirect
-        return redirect($company->path());
+        return redirect(route('companies.index'))->with('added', 'Company '.ucwords($company->name).' has been created');
     }
 
     /**
@@ -110,7 +108,7 @@ class CompanyController extends Controller
 
         $company->delete();
 
-        return redirect('/companies');
+        return redirect('/companies')->with('deleted', 'Company '.ucwords($company->name).' has been deleted');;
     }
 
 
