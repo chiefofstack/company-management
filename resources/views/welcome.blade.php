@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>Company Management</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
@@ -18,7 +18,22 @@
             body {
                 font-family: 'Nunito', sans-serif;
             }
+
+            .welcome-button{
+                background-color: #ff0000;
+                padding: 10px 20px;
+                border-radius: 30px;
+                margin-top: 10px;
+                display: block;
+                float: left;
+            }
+
+            .welcome-button:hover{
+                background-color: #ff3131;
+            }
         </style>
+
+
     </head>
     <body class="antialiased">
         <div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
@@ -84,9 +99,9 @@
                                         Password: password
                                     </p>
                                     <p>
-                                        <b>Note:</b><br> 
-                                        The two admins share the same database tables but are completely independent of each other.
+                                        The two users share the same tables but are completely independent of each other.
                                     </p>
+                                    <a href="{{ route('login') }}" class="welcome-button">Go to login form</a>
                                     
                                 </div>
                             </div>
