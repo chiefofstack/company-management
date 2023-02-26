@@ -11,6 +11,23 @@ class Company extends Model
 
     protected $guarded = [];
 
+    public function scopeFilter(){
+        $companies = Company::with('creator')->where('created_by', '=', auth()->user()->id);
+
+        if (request('search') !== null)
+        {   $companies->where('name','like','%'.request('search').'%');
+            $companies->orWhere('email','like','%'.request('search').'%');
+            $companies->orWhere('website','like','%'.request('search').'%');
+        }
+        
+        $companies = $companies->latest('updated_at')->paginate(10);    
+        return $companies;
+    }
+
+    public function creator(){
+        return $this->belongsTo(User::class,'created_by');
+    }
+
     public function path(){
         return "/companies/{$this->id}";
     }

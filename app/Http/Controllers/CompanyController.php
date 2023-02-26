@@ -13,10 +13,9 @@ class CompanyController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {    
-        // $companies = Company::all();
-        $companies = auth()->user()->companies;
-    
+    {   
+        $companies = Company::filter();
+        
         return view('companies.index', compact('companies'));
     }
 
