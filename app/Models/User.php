@@ -45,4 +45,8 @@ class User extends Authenticatable
     public function companies(){
         return $this->hasMany(Company::class, 'created_by');
     }
+
+    public function employees(){
+        return $this->hasMany(Employee::class, 'created_by');
+    }
 }

@@ -30,6 +30,11 @@ class Company extends Model
         return $this->belongsTo(User::class,'created_by');
     }
 
+    public function employees(){
+        return $this->hasMany(Employee::class, 'company_id');
+    }
+
+
     public function path(){
         return "/companies/{$this->id}";
     }
