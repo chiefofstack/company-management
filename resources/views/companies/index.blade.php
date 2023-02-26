@@ -11,36 +11,69 @@
                 </div>
 
                 <div class="card-body">
-                    <table class="table table-bordered table-responsive">
-                        <thead>
-                            <tr>
-                                <th scope="col">Logo</th>
-                                <th scope="col">Company Name</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Website</th>
-                                <th scope="col">Created By</th>
-                                <th scope="col">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($companies as $company)
-                            <tr>
-                                <td><img src="{{ asset('storage/uploaded/logos') }}/{{ $company->logo }}" alt="{{ $company->name }}"></td>
-                                <td>{{ $company->name }}</td>
-                                <td>{{ $company->email }}</td>
-                                <td>{{ $company->website }}</td>
-                                <td>Creator</td>
-                                <td>
-                                    <button type="button" class="btn btn-primary"><i class="far fa-eye"></i></button>
-                                    <button type="button" class="btn btn-success"><i class="fas fa-edit"></i></button>
-                                    <button type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
-                                </td>
-                            </tr>
-                            @empty
-                                <p>No companies yet</p>
-                            @endforelse     
-                        </tbody>
-                    </table>                    
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <form action="#" method="get">                                    
+                                    <div class="search-form">
+                                        <div class="form-group">
+                                            <input 
+                                                type="text" 
+                                                id="search" 
+                                                name="search" 
+                                                class="input-field error" 
+                                                value="{{ request('search') }}" 
+                                                placeholder="Enter name, email or website"
+                                            >
+                                            <span class="form-message">{{ $companies->total() > 1 ? "There are" : "There is" }} {{ $companies->total() }} {{ $companies->total() > 1 ? "companies" : "company" }} {{ request('search') !== NULL ? "matching" : "" }} '{{ request('search') }}'  </span>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">
+                                            Search
+                                        </button>
+                                    </div>
+                                </form>    
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <table class="table table-bordered table-responsive">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Logo</th>
+                                            <th scope="col">Company Name</th>
+                                            <th scope="col">Email</th>
+                                            <th scope="col">Website</th>
+                                            <th scope="col">Created By</th>
+                                            <th scope="col">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse ($companies as $company)
+                                        <tr>
+                                            <td><img src="{{ asset('storage/uploaded/logos') }}/{{ $company->logo }}" alt="{{ $company->name }}"></td>
+                                            <td>{{ $company->name }}</td>
+                                            <td>{{ $company->email }}</td>
+                                            <td>{{ $company->website }}</td>
+                                            <td>{{ $company->creator->name }}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-primary"><i class="far fa-eye"></i></button>
+                                                <button type="button" class="btn btn-success"><i class="fas fa-edit"></i></button>
+                                                <button type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
+                                            </td>
+                                        </tr>
+                                        @empty
+                                        <tr>
+                                            <td colspan="6"><p>No companies to display</p></td>
+                                        </tr>
+                                            
+                                        @endforelse     
+            
+                                    </tbody>
+                                </table>                    
+                                {{ $companies->links() }}
+                            </div>
+                        </div>
+                    </div> 
                 </div>
             </div>
         </div>
