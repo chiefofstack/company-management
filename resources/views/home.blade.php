@@ -15,6 +15,10 @@
                     @endif
 
                     {{ __('You are logged in!') }}
+                    <br>
+                    <a href="{{ route('companies.index') }}">View All Companies</a><br>
+                    <a href="{{ route('companies.index') }}">View All Employees</a>
+                    
                 </div>
             </div>
         </div>
