@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between">
                     <h4 class="mb-0">Companies</h4>
-                    <a href="{{URL::route('companies.create')}}" class="btn btn-primary">Add New Company</a>
+                    <a href="{{ route('companies.create')}}" class="btn btn-primary">Add New Company</a>
                 </div>
 
                 <div class="card-body">
@@ -55,10 +55,14 @@
                                             <td>{{ $company->email }}</td>
                                             <td>{{ $company->website }}</td>
                                             <td>{{ $company->creator->name }}</td>
-                                            <td>
-                                                <button type="button" class="btn btn-primary"><i class="far fa-eye"></i></button>
-                                                <button type="button" class="btn btn-success"><i class="fas fa-edit"></i></button>
-                                                <button type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
+                                            <td class="row-actions">
+                                                <a href="{{ route('companies.index').'/'.$company->id }}" type="button" class="btn btn-primary"><i class="far fa-eye"></i></a>
+                                                <a href="{{ route('companies.index').'/'.$company->id.'/edit' }}"  type="button" class="btn btn-success"><i class="fas fa-edit"></i></a>
+                                                <form method="POST" action="{{ route('companies.destroy', $company) }}">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger" value="delete"><i class="far fa-trash-alt"></i></button>
+                                                </form>
                                             </td>
                                         </tr>
                                         @empty
