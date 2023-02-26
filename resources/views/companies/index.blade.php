@@ -55,7 +55,7 @@
                                             <td>{{ $company->email }}</td>
                                             <td>{{ $company->website }}</td>
                                             <td>{{ $company->creator->name }}</td>
-                                            <td class="row-actions">
+                                            <td class="col-actions">
                                                 <a href="{{ route('companies.index').'/'.$company->id }}" type="button" class="btn btn-primary"><i class="far fa-eye"></i></a>
                                                 <a href="{{ route('companies.index').'/'.$company->id.'/edit' }}"  type="button" class="btn btn-success"><i class="fas fa-edit"></i></a>
                                                 <form method="POST" action="{{ route('companies.destroy', $company) }}">
