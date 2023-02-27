@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ValidateCompany;
 use Illuminate\Http\Request;
 use App\Models\Company;
 use App\Models\Employee;
@@ -58,10 +59,17 @@ class CompanyController extends Controller
      *
      * @return mixed
      */
-    public function store()
+    public function store(ValidateCompany $request)
     {
+        $attributes = $request->validated();
+
+        if ($attributes['logo'] ?? false) {
+            $attributes['logo'] = basename(request()->file('logo')->store('public/uploaded/logos'));
+        }
+
+        
         //persist
-        $company = auth()->user()->companies()->create($this->validateRequest()); //switch to middleware approach
+        $company = auth()->user()->companies()->create($attributes); //switch to middleware approach
 
         //redirect
         return redirect(route('companies.index'))->with('success', 'Company '.ucwords($company->name).' has been created');
@@ -77,7 +85,7 @@ class CompanyController extends Controller
     {
         return view('companies.edit', compact('company'));
     }
-
+\
     /**
      * Update the company.
      *
@@ -85,13 +93,18 @@ class CompanyController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function update(Company $company)
+    public function update(Company $company, ValidateCompany $request)
     {   // if logged in user not the owner of the company, show error
         if(auth()->user()->id != $company->created_by){
             abort(403);
         }    
 
-        $company->update($this->validateRequest());
+        $attributes = $request->validated();
+        if ($attributes['logo'] ?? false) {
+            $attributes['logo'] = basename(request()->file('logo')->store('public/uploaded/logos'));
+        }
+
+        $company->update($attributes);
 
         return redirect(route('companies.index'))->with('success', 'Company '.ucwords($company->name).' has been updated');
     }
@@ -115,23 +128,6 @@ class CompanyController extends Controller
         return redirect('/companies')->with('success', 'Company '.ucwords($company->name).' has been deleted');;
     }
 
-
-    /**
-     * Validate Requests
-     */
-    public function validateRequest(){
-        //validate
-        return request()->validate([
-            'name' => ['required','max:255'],
-            'email' => ['nullable','max:255'],
-            'logo' => ['nullable','max:255'],
-            'website' => ['nullable','max:255'],
-            // 'name' => ['required','max:255'],
-            // 'email' => ['nullable','email:rfc,dns','max:255'],
-            // 'logo' => ['nullable','image','dimensions:min_width=100,min_height=100','max:1024'],
-            // 'website' => ['nullable','url','max:255'],
-            // 'created_by' => ['required']
-        ]);
-    }
+ 
 }
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ValidateEmployee;
 use Illuminate\Http\Request;
 use App\Models\Company;
 use App\Models\Employee;
@@ -55,10 +56,10 @@ class EmployeeController extends Controller
      *
      * @return mixed
      */
-    public function store()
+    public function store(ValidateEmployee $request)
     {
         //persist
-        $employee = auth()->user()->employees()->create($this->validateRequest()); //switch to middleware approach
+        $employee = auth()->user()->employees()->create($request->validated()); //switch to middleware approach
 
         //redirect
         return redirect(route('employees.index'))->with('success', 'Employee '.ucwords($employee->first_name).' '.ucwords($employee->last_name).' has been created');
@@ -82,13 +83,13 @@ class EmployeeController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function update(Employee $employee)
+    public function update(Employee $employee, ValidateEmployee $request)
     {   // if logged in user not the owner of the employee, show error
         if(auth()->user()->id != $employee->created_by){
             abort(403);
         }    
 
-        $employee->update($this->validateRequest());
+        $employee->update($request->validated());
 
         return redirect(route('employees.index'))->with('success', 'Employee '.ucwords($employee->first_name).' '.ucwords($employee->last_name).' has been updated');
     }
@@ -113,22 +114,4 @@ class EmployeeController extends Controller
     }
 
 
-    /**
-     * Validate Requests
-     */
-    public function validateRequest(){
-        //validate
-        return request()->validate([
-            'first_name' => ['required','max:255'],
-            'last_name' => ['required','max:255'],
-            'email' => ['nullable','max:255'],
-            'phone_number' => ['nullable','max:255'],
-            'company_id' => ['nullable'],
-            // 'name' => ['required','max:255'],
-            // 'email' => ['nullable','email:rfc,dns','max:255'],
-            // 'logo' => ['nullable','image','dimensions:min_width=100,min_height=100','max:1024'],
-            // 'website' => ['nullable','url','max:255'],
-            // 'created_by' => ['required']
-        ]);
-    }
 }
