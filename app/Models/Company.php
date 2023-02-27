@@ -12,7 +12,7 @@ class Company extends Model
     protected $guarded = [];
 
     public function scopeFilter(){
-        $companies = Company::with('creator')->where('created_by', '=', auth()->user()->id);
+        $companies = Company::where('created_by', '=', auth()->user()->id);
 
         if (request('search') !== null)
         {   $companies->where(function($query) {
