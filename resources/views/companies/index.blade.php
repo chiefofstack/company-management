@@ -58,18 +58,37 @@
                                         @forelse ($companies as $company)
                                         <tr>
                                             <td><img src="{{ asset('storage/uploaded/logos') }}/{{ $company->logo }}" alt="{{ $company->name }}"></td>
-                                            <td>{{ $company->name }}</td>
-                                            <td>{{ $company->email }}</td>
-                                            <td>{{ $company->website }}</td>
+                                            <td>
+                                                <a href="{{ route('companies.index').'/'.$company->id}}">
+                                                    {{ $company->name  ?? ''}}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                @if($company->email != NULL)
+                                                <a href="mailto:{{ $company->email }}">
+                                                    {{ $company->email  ?? ''}}
+                                                </a>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if($company->website != NULL)
+                                                <a href="{{ $company->website }}" target="_blank">
+                                                    {{ $company->website  ?? ''}}
+                                                </a>
+                                                @endif
+                                            </td>
                                             <td>{{ $company->creator->name }}</td>
-                                            <td class="col-actions">
-                                                <a href="{{ route('companies.index').'/'.$company->id }}" type="button" class="btn btn-primary"><i class="far fa-eye"></i></a>
-                                                <a href="{{ route('companies.index').'/'.$company->id.'/edit' }}"  type="button" class="btn btn-success"><i class="fas fa-edit"></i></a>
-                                                <form method="POST" action="{{ route('companies.destroy', $company) }}">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger" value="delete"><i class="far fa-trash-alt"></i></button>
-                                                </form>
+                                            
+                                            <td>
+                                                <div class="col-actions">
+                                                    <a href="{{ route('companies.index').'/'.$company->id }}" type="button" class="btn btn-primary"><i class="far fa-eye"></i></a>
+                                                    <a href="{{ route('companies.index').'/'.$company->id.'/edit' }}"  type="button" class="btn btn-success"><i class="fas fa-edit"></i></a>
+                                                    <form method="POST" action="{{ route('companies.destroy', $company) }}">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger" value="delete"><i class="far fa-trash-alt"></i></button>
+                                                    </form>
+                                                </div>
                                             </td>
                                         </tr>
                                         @empty
