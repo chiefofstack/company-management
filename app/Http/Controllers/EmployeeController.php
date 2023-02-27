@@ -46,7 +46,7 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        return view('employees.create');
+        return view('employees.create',['companies' => Company::all()]);
     }
 
     
@@ -71,8 +71,8 @@ class EmployeeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Employee $employee)
-    {
-        return view('employees.edit', compact('employee'));
+    {   
+        return view('employees.edit',  [ 'employee'=>$employee, 'companies' => Company::all()] );
     }
 
     /**
@@ -121,8 +121,9 @@ class EmployeeController extends Controller
         return request()->validate([
             'first_name' => ['required','max:255'],
             'last_name' => ['required','max:255'],
-            'email' => ['required','max:255'],
-            'phone_number' => ['required','max:255'],
+            'email' => ['nullable','max:255'],
+            'phone_number' => ['nullable','max:255'],
+            'company_id' => ['nullable'],
             // 'name' => ['required','max:255'],
             // 'email' => ['nullable','email:rfc,dns','max:255'],
             // 'logo' => ['nullable','image','dimensions:min_width=100,min_height=100','max:1024'],
