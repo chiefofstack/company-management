@@ -82,14 +82,16 @@
                                                 @endif
                                             </td>
                                             <td>{{ $employee->creator->name }}</td>
-                                            <td class="col-actions">
-                                                <a href="{{ route('employees.index').'/'.$employee->id }}" type="button" class="btn btn-primary"><i class="far fa-eye"></i></a>
-                                                <a href="{{ route('employees.index').'/'.$employee->id.'/edit' }}"  type="button" class="btn btn-success"><i class="fas fa-edit"></i></a>
-                                                <form method="POST" action="{{ route('employees.destroy', $employee) }}">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger" value="delete"><i class="far fa-trash-alt"></i></button>
-                                                </form>
+                                            <td>
+                                                <div class="col-actions">
+                                                    <a href="{{ route('employees.index').'/'.$employee->id }}" type="button" class="btn btn-primary"><i class="far fa-eye"></i></a>
+                                                    <a href="{{ route('employees.index').'/'.$employee->id.'/edit' }}"  type="button" class="btn btn-success"><i class="fas fa-edit"></i></a>
+                                                    <form method="POST" action="{{ route('employees.destroy', $employee) }}">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger" value="delete"><i class="far fa-trash-alt"></i></button>
+                                                    </form>
+                                                </div>
                                             </td>
                                         </tr>
                                         @empty
