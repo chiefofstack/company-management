@@ -31,8 +31,8 @@
                     @method('PATCH')
                         <div class="employee-form">          
                             <x-form.input name="first_name" label="First Name" :value="old('first_name', $employee->first_name)"/>
-                            <x-form.input name="last_name" label="Last Name" :value="old('last_name', $employee->last_name)"/>
-                            <x-form.input name="company_id" label="Company" :value="old('company_id', $employee->company->id)"/>
+                            <x-form.input name="last_name" label="Last Name" :value="old('last_name', $employee->last_name)"/>                           
+                            <x-form.select name="company_id" label="Company" :value="old('company_id', $employee->company->id ?? '')" :list="$companies" />
                             <x-form.input name="email" label="Email Address" :value="old('email', $employee->email)"/>
                             <x-form.input name="phone_number" label="Phone Number" :value="old('phone_number', $employee->phone_number)"/>
                             <div class="row mb-3">                                    

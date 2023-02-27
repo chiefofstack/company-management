@@ -20,7 +20,7 @@
                         <div class="employee-form">          
                             <x-form.input name="first_name" label="First Name"/>
                             <x-form.input name="last_name" label="Last Name"/>
-                            <x-form.input name="company_id" label="Company"/>
+                            <x-form.select name="company_id" label="Company" :value="old('company_id', $employee->company->id ?? '')" :list="$companies" />
                             <x-form.input name="email" label="Email Address"/>
                             <x-form.input name="phone_number" label="Phone Number"/>
                             <div class="row mb-3">                                    
