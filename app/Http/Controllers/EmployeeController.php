@@ -61,7 +61,7 @@ class EmployeeController extends Controller
         $employee = auth()->user()->employees()->create($this->validateRequest()); //switch to middleware approach
 
         //redirect
-        return redirect(route('employees.index'))->with('success', 'Employee '.ucwords($employee->name).' has been created');
+        return redirect(route('employees.index'))->with('success', 'Employee '.ucwords($employee->first_name).' '.ucwords($employee->last_name).' has been created');
     }
 
     /**
@@ -90,7 +90,7 @@ class EmployeeController extends Controller
 
         $employee->update($this->validateRequest());
 
-        return redirect(route('employees.index'))->with('success', 'Employee '.ucwords($employee->name).' has been updated');
+        return redirect(route('employees.index'))->with('success', 'Employee '.ucwords($employee->first_name).' '.ucwords($employee->last_name).' has been updated');
     }
 
     /**
@@ -109,7 +109,7 @@ class EmployeeController extends Controller
 
         $employee->delete();
 
-        return redirect('/employees')->with('success', 'Employee '.ucwords($employee->name).' has been deleted');;
+        return redirect('/employees')->with('success', 'Employee '.ucwords($employee->first_name).' '.ucwords($employee->last_name).' has been deleted');;
     }
 
 
