@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Company;
+use App\Models\Employee;
 
 class CompanyController extends Controller
 {
@@ -34,8 +35,11 @@ class CompanyController extends Controller
         }    
 
         //$company = Company::findOrFail(request('company'));
+        $companyEmployees = Employee::where('created_by', '=', auth()->user()->id)
+                                    ->where('company_id', '=', $company->id)
+                                    ->latest('updated_at')->paginate(10);   
     
-        return view('companies.show', compact('company'))->with('employees', $company->employees);
+        return view('companies.show', compact('company'))->with('employees', $companyEmployees);
     }
 
     /**
