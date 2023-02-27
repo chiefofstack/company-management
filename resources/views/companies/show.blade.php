@@ -72,9 +72,10 @@
             </div>
 
             <!-- Company Employees -->
-            <div class="card">
+            <div class="card mt-5">
                 <div class="card-header d-flex align-items-center justify-content-between">
                     <h4 class="mb-0">Company Employees</h4>
+                    <a href="{{ route('employees.create', $company) }}"  type="button" class="btn btn-primary">Add</a>
                 </div>
 
                 <div class="card-body">
