@@ -4,15 +4,9 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            @if (session('added'))
+            @if (session('success'))
                 <div class="alert alert-success alert-dismissible" >
-                    {{ session('added') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif 
-            @if (session('deleted'))
-                <div class="alert alert-success alert-dismissible" >
-                    {{ session('deleted') }}
+                    {{ session('success') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif 

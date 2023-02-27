@@ -64,7 +64,7 @@ class CompanyController extends Controller
         $company = auth()->user()->companies()->create($this->validateRequest()); //switch to middleware approach
 
         //redirect
-        return redirect(route('companies.index'))->with('added', 'Company '.ucwords($company->name).' has been created');
+        return redirect(route('companies.index'))->with('success', 'Company '.ucwords($company->name).' has been created');
     }
 
     /**
@@ -93,7 +93,7 @@ class CompanyController extends Controller
 
         $company->update($this->validateRequest());
 
-        return redirect($company->path());
+        return redirect(route('companies.index'))->with('success', 'Company '.ucwords($company->name).' has been updated');
     }
 
     /**
@@ -112,7 +112,7 @@ class CompanyController extends Controller
 
         $company->delete();
 
-        return redirect('/companies')->with('deleted', 'Company '.ucwords($company->name).' has been deleted');;
+        return redirect('/companies')->with('success', 'Company '.ucwords($company->name).' has been deleted');;
     }
 
 
