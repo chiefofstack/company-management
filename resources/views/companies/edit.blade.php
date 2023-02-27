@@ -32,7 +32,7 @@
                         <div class="company-form">          
                             <x-form.input name="name" label="Company Name" :value="old('name', $company->name)"/>
                             <x-form.input name="email" label="Email Address" :value="old('email', $company->email)"/>
-                            <x-form.input name="logo" label="Company Logo" :value="old('logo', $company->logo)"/>
+                            <x-form.file name="logo" label="Company Logo" :value="old('logo', $company->logo)"/>
                             <x-form.input name="website" label="Website" :value="old('website', $company->website)"/>
                             <div class="row mb-3">                                    
                                 <div class="col-md-6 offset-4">

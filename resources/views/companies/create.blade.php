@@ -15,12 +15,13 @@
             <div class="card">
                 <div class="card-header">Create a Company</div>
                 <div class="card-body">
+                    
                     <form action="{{ route('companies.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
                         <div class="company-form">          
                             <x-form.input name="name" label="Company Name"/>
                             <x-form.input name="email" label="Email Address"/>
-                            <x-form.input name="logo" label="Company Logo"/>
+                            <x-form.file name="logo" label="Company Logo" />
                             <x-form.input name="website" label="Website"/>
                             <div class="row mb-3">                                    
                                 <div class="col-md-6 offset-4">
@@ -30,9 +31,12 @@
                                 </div>
                             </div>  
                         </div>
-                    </form>   
+                    </form> 
+
                 </div>
+
             </div>
+
         </div>
     </div>
 </div>
