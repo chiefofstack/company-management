@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Company;
+use App\Models\Employee;
 
 class HomeController extends Controller
 {
@@ -23,6 +25,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+
+        $companyTotal = Company::where('created_by','=',auth()->user()->id)->count();
+        $employeeTotal = Employee::where('created_by','=',auth()->user()->id)->count();
+        return view('home',['companyTotal' => $companyTotal, 'employeeTotal' => $employeeTotal]);
     }
 }
