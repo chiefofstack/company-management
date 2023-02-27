@@ -36,7 +36,7 @@ class EmployeeController extends Controller
 
         $employeeCompany = Company::where('id', '=', $employee->company_id)->get();  
     
-        return view('companies.show', compact('company'))->with('employees', $employeeCompany);
+        return view('employees.show', compact('employee'))->with('company', $employeeCompany);
     }
 
     /**
