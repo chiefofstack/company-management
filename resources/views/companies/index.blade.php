@@ -50,6 +50,7 @@
                                             <th scope="col">Company Name</th>
                                             <th scope="col">Email</th>
                                             <th scope="col">Website</th>
+                                            <th scope="col">No of Employees</th>
                                             <th scope="col">Created By</th>
                                             <th scope="col">Actions</th>
                                         </tr>
@@ -57,7 +58,16 @@
                                     <tbody>
                                         @forelse ($companies as $company)
                                         <tr>
-                                            <td><img src="{{ asset('storage/uploaded/logos') }}/{{ $company->logo }}" alt="{{ $company->name }}"></td>
+                                            
+                                            <td>
+                                                <a href="{{ route('companies.index').'/'.$company->id}}" class="thumbnail">
+                                                    @if($company->logo != NULL)
+                                                        <img src="{{ asset('storage/uploaded/logos') }}/{{ $company->logo }}" alt="{{ $company->name }}">
+                                                    @else
+                                                        <img src="{{ asset('images/no-photo.jpg') }}" alt="{{ $company->name }}">
+                                                    @endif
+                                                </a>    
+                                            </td>
                                             <td>
                                                 <a href="{{ route('companies.index').'/'.$company->id}}">
                                                     {{ $company->name  ?? ''}}
@@ -76,6 +86,11 @@
                                                     {{ $company->website  ?? ''}}
                                                 </a>
                                                 @endif
+                                            </td>
+                                            <td>
+                                                <a href="{{ route('companies.index').'/'.$company->id}}">
+                                                    {{ $company->employees->count()  ?? ''}}
+                                                </a>
                                             </td>
                                             <td>{{ $company->creator->name }}</td>
                                             

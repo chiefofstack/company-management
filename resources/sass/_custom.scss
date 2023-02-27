@@ -41,3 +41,17 @@
     flex-direction: row;
     justify-content: space-evenly;
 }
+
+
+.thumbnail{
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    background-color: #f1f1f1;
+    & img{
+        width: 100%;
+    }
+}

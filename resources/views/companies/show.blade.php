@@ -34,13 +34,13 @@
                     <div class="container">
                         <div class="row mt-2">
                             <div class="col-12 d-flex">
-                                <img 
-                                    src="{{  $company->logo ? asset('storage/uploaded/logos/'.$company->logo) : asset('image/blank.jpg') }}" 
-                                    width="100" 
-                                    height="100" 
-                                    alt="{{ $company->name }}" 
-                                    class="border-0"
-                                >
+                                <a href="{{ route('companies.index').'/'.$company->id}}" class="thumbnail">
+                                    @if($company->logo != NULL)
+                                        <img src="{{ asset('storage/uploaded/logos') }}/{{ $company->logo }}" alt="{{ $company->name }}">
+                                    @else
+                                        <img src="{{ asset('images/no-photo.jpg') }}" alt="{{ $company->name }}">
+                                    @endif
+                                </a>    
                                 <ul class="ml-4">
                                     <li class="text-break list-group-item">
                                         <h4>{{ $company->name }}</h4>
@@ -74,8 +74,8 @@
             <!-- Company Employees -->
             <div class="card mt-5">
                 <div class="card-header d-flex align-items-center justify-content-between">
-                    <h4 class="mb-0">Company Employees</h4>
-                    <a href="{{ route('employees.create', $company) }}"  type="button" class="btn btn-primary">Add</a>
+                    <h4 class="mb-0">Company Employees ({{$employees->count()}}) </h4>
+                    <a href="{{ route('employees.create',['company_id'=>$company]) }}"  type="button" class="btn btn-primary">Add New Employee</a>
                 </div>
 
                 <div class="card-body">
@@ -87,18 +87,37 @@
                                     <thead>
                                         <tr>
                                             <th scope="col">Name</th>
-                                            <th scope="col">Company</th>
                                             <th scope="col">Email</th>
                                             <th scope="col">Phone Number</th>
+                                            <th scope="col">Company</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @forelse ($employees as $employee)
                                         <tr>
-                                            <td>{{ $employee->name }}</td>
-                                            <td>{{ $employee->company }}</td>
-                                            <td>{{ $employee->email }}</td>
-                                            <td>{{ $employee->phone_number }}</td>
+                                            <td>
+                                                <a href="{{ route('employees.index').'/'.$employee->id}}">
+                                                    {{ ucwords($employee->first_name)." ".ucwords($employee->last_name) }}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a 
+                                                    href="mailto:{{ $employee->email }}">
+                                                    {{ $employee->email }}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="tel:{{ $employee->phone_number }}">
+                                                    {{ $employee->phone_number }}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                @if($employee->company != NULL)
+                                                <a href="{{ route('companies.index').'/'.$employee->company->id}}">
+                                                    {{ $employee->company->name  ?? ''}}
+                                                </a>
+                                                @endif
+                                            </td>
                                         </tr>
                                         @empty
                                         <tr>
