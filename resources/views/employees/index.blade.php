@@ -57,10 +57,30 @@
                                     <tbody>
                                         @forelse ($employees as $employee)
                                         <tr>
-                                            <td>{{ ucwords($employee->first_name)." ".ucwords($employee->last_name) }}</td>
-                                            <td>{{ $employee->email }}</td>
-                                            <td>{{ $employee->phone_number }}</td>
-                                            <td>{{ $employee->company->name  ?? ''}}</td>
+                                            <td>
+                                                <a href="{{ route('employees.index').'/'.$employee->id}}">
+                                                    {{ ucwords($employee->first_name)." ".ucwords($employee->last_name) }}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a 
+                                                    href="mailto:{{ $employee->email }}">
+                                                    {{ $employee->email }}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="tel:{{ $employee->phone_number }}">
+                                                    {{ $employee->phone_number }}
+                                                </a>
+                                            </td>
+                                            
+                                            <td>
+                                                @if($employee->company != NULL)
+                                                <a href="{{ route('companies.index').'/'.$employee->company->id}}">
+                                                    {{ $employee->company->name  ?? ''}}
+                                                </a>
+                                                @endif
+                                            </td>
                                             <td>{{ $employee->creator->name }}</td>
                                             <td class="col-actions">
                                                 <a href="{{ route('employees.index').'/'.$employee->id }}" type="button" class="btn btn-primary"><i class="far fa-eye"></i></a>
