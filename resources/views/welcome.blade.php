@@ -72,7 +72,7 @@
                                 <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
                                     <p>A simple Laravel demo of an admin panel to manage companies and employees. I followed Test Driven Development (TDD) approach as much as possible.</p>
                                     
-                                    <p>This project aims to demonstrate the usage of basic Laravel authentication, seeder, CRUD, migration, file upload and management, resource controllers, validation using request classes, pagination, laravel-ui, and I also added feature tests and factories.</p>
+                                    <p>This project aims to demonstrate the usage of basic Laravel authentication, seeder, CRUD, migration, file upload, resource controllers, validation using request classes, pagination, laravel-ui, and I also added feature tests and factories.</p>
                                                                     
                                     <p>User registration has been disabled but I added a second user to simulate real-world usage where in users can only interact with their own content.</p>
                                     
